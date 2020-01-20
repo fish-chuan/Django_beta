@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% endblock %}
+
+
+
+
+{% block nav %}
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">借用系統</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" >Hello {{user.first_name}}<span class="sr-only">(current)</span></a>
+      </div>
+    </div>
+    <form class="form-inline my-2 my-lg-0" action="accounts/logout">
+      {% csrf_token %}
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">登出</button>
+    </form>
+  </nav>
+{% else %}
+{% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+      <form class="form-signin" action="apply" method="POST">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Welcome</h1>
+        <label>User</label>
+        <input type="text" name="apply_user" class="form-control" required autofocus/>
+        <label>number</label>
+        <input type="text" name="item_id" class="form-control" required autofocus/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    </form>
+</div>
+{% else %}
+<h2>請先登入！</h2>
+{% endif %}
+{% endblock %}

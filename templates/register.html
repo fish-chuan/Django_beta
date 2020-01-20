@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}<link href="{% static 'css/signin.css' %}" type="text/css" rel="stylesheet" />{% endblock %}
+
+{% block content %}
+<form class="form-signin" action="register" method="POST">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 font-weight-normal">註冊</h1>
+    <label>使用者名稱</label>
+    <input type="text" name="first_name" class="form-control" required autofocus/>
+    <label>帳戶名稱</label>
+    <input type="text" name="username" class="form-control" required autofocus/>
+    <label>電子郵件</label>
+    <input type="email" name="email" class="form-control" required autofocus/>
+    <label>密碼</label>
+    <input type="password" name="password1" class="form-control" required autofocus/>
+    <label>密碼確認</label>
+    <input type="password" name="password2" class="form-control" required autofocus/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">註冊</button>
+    {% for message in messages %}
+    <h5>{{message}}</h5>
+    {% endfor %}
+  </form>
+{% endblock %}

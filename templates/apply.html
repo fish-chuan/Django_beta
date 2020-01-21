@@ -8,7 +8,7 @@
 
 
 {% block nav %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.is_superuser %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">借用系統</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,18 +31,43 @@
 
 
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.is_superuser %}
 <div class="container">
-      <form class="form-signin" action="apply" method="POST">
-        {% csrf_token %}
-        <h1 class="h3 mb-3 font-weight-normal">Welcome</h1>
-        <label>User</label>
-        <input type="text" name="apply_user" class="form-control" required autofocus/>
-        <label>number</label>
-        <input type="text" name="item_id" class="form-control" required autofocus/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-    </form>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">編號</th>
+        <th scope="col">項目</th>
+        <th scope="col">申請人</th>
+        <th scope="col">核准</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td scope="row">{{item.item_id}}</td>
+            <td scope="row">{{item.item_name}}</td>
+            <td scope="row">{{item.apply_user}}</td>
+            <form action="manage" method="POST">
+              {% csrf_token %}
+              <input type="hidden" value="{{item.id}}" name="col_id" />
+              <input type="hidden" value="{{item.item_id}}" name="item_id" />
+              <td scope="row">
+                <select name="check">
+                  <option>核准</option>
+                  <option>拒絕</option>
+                </select>
+                </td>
+              <td scope="row"><button type="submit">審核</button></td>
+            </form>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 </div>
+{% elif user.is_authenticated and not user.is_superuser %}
+<h2>此功能僅開放管理員喔！</h2>
+<a href="/">回首頁</a>
 {% else %}
 <h2>請先登入！</h2>
 {% endif %}

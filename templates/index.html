@@ -25,18 +25,32 @@
             <th scope="col">編號</th>
             <th scope="col">項目</th>
             <th scope="col">狀態</th>
+            <th scope="col">借用</th>
           </tr>
         </thead>
         <tbody>
             {% for item in items %}
             <tr>
-                <th scope="row">{{item.item_id}}</th>
+                <td scope="row">{{item.item_id}}</td>
                 <td>{{item.name}}</td>
-                {% if item.status %}
+                {% if item.status == 'A' %}
                 <td><button type="button" class="btn btn-success">可借用</button></td>
+                {% elif item.status == 'C'%}
+                <td><button type="button" class="btn btn-warning">申請中</button></td>
                 {% else %}
-                <td><button type="button" class="btn btn-warning">已借出</button></td>
+                <td><button type="button" class="btn btn-secondary">已借出</button></td>
                 {% endif %}
+                <form action="send_apply" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{item.item_id}}" name="item_id" />
+                  <input type="hidden" value="{{user.username}}" name="apply_user" />
+                  <input type="hidden" value="{{item.name}}" name="item_name" />
+                {% if item.is_apply %}
+                <td><button type="submit" disabled>申請</button></td>
+                {% else %}
+                <td><button type="submit">申請</button></td>
+                {% endif %}
+                </form>
             </tr>
             {% endfor %}
         </tbody>

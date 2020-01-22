@@ -37,8 +37,9 @@ def manage(request):
         result = request.POST['check']
         if result == '核准':
             itemm = Item.objects.get(item_id=item_id)
-            item_delete = Applying.objects.get(id=col_id)
-            item_delete.delete()
+            item = Applying.objects.get(id=col_id)
+            item.is_lent = True
+            item.save()
             itemm.status = 'P'
             itemm.save()
         else:
@@ -52,3 +53,17 @@ def manage(request):
 
     else:
         return render(request, 'apply.html')
+
+def back(request):
+    if request.method == 'POST':
+        get_id = request.POST['item_id']
+        re_check = Applying.objects.get(item_id=get_id)
+        itemm = Item.objects.get(item_id=get_id)
+        re_check.delete()
+        itemm.status = 'A'
+        itemm.is_apply = False
+        itemm.save()
+        return redirect('back')
+    else:
+        data = Applying.objects.all()
+        return render(request, 'back.html', {'items':data})

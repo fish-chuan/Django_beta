@@ -48,6 +48,9 @@
             <td scope="row">{{item.item_id}}</td>
             <td scope="row">{{item.item_name}}</td>
             <td scope="row">{{item.apply_user}}</td>
+            {% if item.is_lent %}
+            <td>已審核</td>
+            {% else %}
             <form action="manage" method="POST">
               {% csrf_token %}
               <input type="hidden" value="{{item.id}}" name="col_id" />
@@ -60,6 +63,7 @@
                 </td>
               <td scope="row"><button type="submit">審核</button></td>
             </form>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

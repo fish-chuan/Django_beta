@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% if user.is_authenticated %}
+{% else %}
+<link href="{% static 'css/signin.css' %}" type="text/css" rel="stylesheet" />
+{% endif %}
+{% endblock %}
+
+{% block nav %}
+{% if user.is_authenticated %}
+{% include 'nav.html' %}
+{% else %}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">編號</th>
+            <th scope="col">項目</th>
+            <th scope="col">申請人</th>
+            <th scope="col">借出時間</th>
+            <th scope="col">歸還時間</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td scope="row">{{item.item_id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.apply_user}}</td>
+                <td>{{item.lent_time}}</td>
+                <td>{{item.back_time}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% else %}
+<form class="form-signin" action="accounts/login">
+    <h1 class="h3 mb-3 font-weight-normal">Welcome</h1>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
+    <a href="accounts/register">點我註冊</a>
+</form>
+{% endif %}
+{% endblock %}

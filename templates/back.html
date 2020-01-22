@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% if user.is_authenticated %}
+{% else %}
+<link href="{% static 'css/signin.css' %}" type="text/css" rel="stylesheet" />
+{% endif %}
+{% endblock %}
+
+{% block nav %}
+{% if user.is_authenticated %}
+{% include 'nav.html' %}
+{% else %}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if user.is_authenticated and user.is_superuser %}
+<div class="container">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">編號</th>
+            <th scope="col">項目</th>
+            <th scope="col">申請人</th>
+            <th scope="col">歸還</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td scope="row">{{item.item_id}}</td>
+                <td>{{item.item_name}}</td>
+                <td>{{item.apply_user}}</td>
+                <form action="back" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{item.item_id}}" name="item_id" />
+                    <td><button type="submit">確認</button></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% else %}
+<h2>此功能不開放一般使用</h2>
+</form>
+{% endif %}
+{% endblock %}

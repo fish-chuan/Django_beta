@@ -9,21 +9,7 @@
 
 {% block nav %}
 {% if user.is_authenticated and user.is_superuser %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">借用系統</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" >Hello {{user.first_name}}<span class="sr-only">(current)</span></a>
-      </div>
-    </div>
-    <form class="form-inline my-2 my-lg-0" action="accounts/logout">
-      {% csrf_token %}
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">登出</button>
-    </form>
-  </nav>
+{% include 'nav.html' %}
 {% else %}
 {% endif %}
 {% endblock %}
@@ -53,7 +39,6 @@
             {% else %}
             <form action="manage" method="POST">
               {% csrf_token %}
-              <input type="hidden" value="{{item.id}}" name="col_id" />
               <input type="hidden" value="{{item.item_id}}" name="item_id" />
               <td scope="row">
                 <select name="check">

@@ -19,34 +19,42 @@
 {% block content %}
 {% if user.is_authenticated %}
 <div class="container">
+  <h2>{{user.first_name}}的借用紀錄</h2>
     <table class="table">
         <thead>
           <tr>
             <th scope="col">編號</th>
             <th scope="col">項目</th>
-            <th scope="col">申請人</th>
+            <th scope="col">歸還狀態</th>
             <th scope="col">借出時間</th>
             <th scope="col">歸還時間</th>
           </tr>
         </thead>
         <tbody>
             {% for item in items %}
+            {% if item.apply_user == user.username %}
             <tr>
                 <td scope="row">{{item.item_id}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.apply_user}}</td>
+                <td>{{item.item_name}}</td>
+                {% if item.item_status %}
+                <td><button type="button" class="btn btn-outline-success">已歸還</button></td>
+                {% else %}
+                <td><button type="button" class="btn btn-outline-danger">未歸還</button></td>
+                {% endif %}
                 <td>{{item.lent_time}}</td>
+                {% if item.item_status %}
                 <td>{{item.back_time}}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
             </tr>
+            {% else %}
+            {% endif %}
             {% endfor %}
         </tbody>
       </table>
 </div>
 {% else %}
-<form class="form-signin" action="accounts/login">
-    <h1 class="h3 mb-3 font-weight-normal">Welcome</h1>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
-    <a href="accounts/register">點我註冊</a>
-</form>
+<h2>您尚未登入！</h2>
 {% endif %}
 {% endblock %}

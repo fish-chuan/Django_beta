@@ -28,5 +28,6 @@ class Record(models.Model):
     item_id = models.TextField(default="0000")
     item_name = models.TextField(default="none")
     apply_user = models.TextField(default="user")
+    item_status = models.BooleanField(default=False)
     lent_time = models.DateTimeField(auto_now_add=True)
-    back_time = models.DateTimeField(auto_now_add=True)
+    back_time = models.DateTimeField(auto_now=True)

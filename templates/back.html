@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block nav %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.is_superuser%}
 {% include 'nav.html' %}
 {% else %}
 {% endif %}
@@ -46,6 +46,7 @@
 </div>
 {% else %}
 <h2>此功能不開放一般使用</h2>
+<a href="/">回首頁</a>
 </form>
 {% endif %}
 {% endblock %}

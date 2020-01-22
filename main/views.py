@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from main.models import Item
-from main.models import Applying
+from main.models import Item, Applying, Record
 from django.contrib.auth.models import User, auth
 # Create your views here.
 
@@ -32,12 +31,13 @@ def send_apply(request):
 
 def manage(request):
     if request.method == 'POST':
-        col_id = request.POST['col_id']
         item_id = request.POST['item_id']
         result = request.POST['check']
         if result == '核准':
             itemm = Item.objects.get(item_id=item_id)
-            item = Applying.objects.get(id=col_id)
+            item = Applying.objects.get(item_id=item_id)
+            re = Record.objects.create(item_id=item_id, item_name=item.item_name, apply_user=item.apply_user)
+            re.save()
             item.is_lent = True
             item.save()
             itemm.status = 'P'
@@ -49,7 +49,7 @@ def manage(request):
             itemm.status = 'A'
             itemm.is_apply = False
             itemm.save()
-        return redirect('apply')
+        return render(request, 'apply.html')
 
     else:
         return render(request, 'apply.html')
@@ -58,6 +58,9 @@ def back(request):
     if request.method == 'POST':
         get_id = request.POST['item_id']
         re_check = Applying.objects.get(item_id=get_id)
+        re = Record.objects.get(item_id=get_id)
+        re.item_status = True
+        re.save()
         itemm = Item.objects.get(item_id=get_id)
         re_check.delete()
         itemm.status = 'A'
@@ -67,3 +70,7 @@ def back(request):
     else:
         data = Applying.objects.all()
         return render(request, 'back.html', {'items':data})
+
+def record(request):
+    data = Record.objects.all()
+    return render(request, 'record.html', {'items': data})

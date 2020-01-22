@@ -15,7 +15,7 @@ class Item(models.Model):
         (Pass, 'Pass'),
     ]
 
-    status = models.CharField(max_length = 1, choices = ITEM_STATUS, default = Available,)
+    status = models.CharField(max_length = 1, choices = ITEM_STATUS, default = Available)
     is_apply = models.BooleanField(default=False)
 
 class Applying(models.Model):

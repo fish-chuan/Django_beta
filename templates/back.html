@@ -30,6 +30,8 @@
         </thead>
         <tbody>
             {% for item in items %}
+            {% if item.item_id == "0000" %}
+            {% else %}
             <tr>
                 <td scope="row">{{item.item_id}}</td>
                 <td>{{item.item_name}}</td>
@@ -40,6 +42,7 @@
                     <td><button type="submit">確認</button></td>
                 </form>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
       </table>

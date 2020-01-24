@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from main.models import Item, Applying, Record
 from django.contrib.auth.models import User, auth
 # Create your views here.
@@ -17,14 +18,18 @@ def send_apply(request):
         item_name = request.POST['item_name']
         item_id = request.POST['item_id']
 
-        app = Applying.objects.create(apply_user=apply_user, item_name=item_name, item_id=item_id)
-        app.save()
-        print("app save")
-        itemm = Item.objects.get(item_id=item_id)
-        itemm.is_apply = True
-        itemm.status = 'C'
-        itemm.save()
-        print("item change")
+        check = Applying.objects.filter(item_id=item_id)
+        if len(check):
+            messages.info(request, "此項目已被申請！")
+        else:
+            app = Applying.objects.create(apply_user=apply_user, item_name=item_name, item_id=item_id)
+            app.save()
+            print("app save")
+            itemm = Item.objects.get(item_id=item_id)
+            itemm.is_apply = True
+            itemm.status = 'C'
+            itemm.save()
+            print("item change")
         return redirect('/')
     else:
         return render(request, 'index.html')
@@ -49,7 +54,7 @@ def manage(request):
             itemm.status = 'A'
             itemm.is_apply = False
             itemm.save()
-        return render(request, 'apply.html')
+        return redirect('apply')
 
     else:
         return render(request, 'apply.html')

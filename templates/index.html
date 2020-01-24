@@ -19,6 +19,9 @@
 {% block content %}
 {% if user.is_authenticated %}
 <div class="container">
+  {% for message in messages %}
+  <h3>系統訊息： {{message}}</h3>
+    {% endfor %}
     <table class="table">
         <thead>
           <tr>
